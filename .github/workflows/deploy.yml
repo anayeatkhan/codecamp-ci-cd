@@ -38,8 +38,8 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY_V23 }}
 
-      # - name: Setup GCloud SDK
-      #   uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       # # ----------------------
       # # Docker auth
