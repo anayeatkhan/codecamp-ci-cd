@@ -63,37 +63,37 @@ jobs:
         run: |
           docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:${IMAGE_TAG}
 
-      # # ----------------------
-      # # Deploy to VM
-      # # ----------------------
-      # - name: Deploy to VM
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ vars.VM_HOST }}
-      #     username: ${{ vars.VM_USER }}
-      #     key: ${{ secrets.VM_SSH_KEY }}
-      #     envs: IMAGE_TAG,PROJECT_ID,REGION,REPOSITORY,IMAGE_NAME
-      #     script: |
-      #       set -e
+      # ----------------------
+      # Deploy to VM
+      # ----------------------
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.VM_HOST }}
+          username: ${{ vars.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          envs: IMAGE_TAG,PROJECT_ID,REGION,REPOSITORY,IMAGE_NAME
+          script: |
+            set -e
 
-      #       IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:${IMAGE_TAG}"
+            IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:${IMAGE_TAG}"
 
-      #       echo "Deploying frontend: $IMAGE"
+            echo "Deploying frontend: $IMAGE"
 
-      #       gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+            gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
 
-      #       docker network create backend-net || true
+            docker network create backend-net || true
 
-      #       docker stop frontend || true
-      #       docker rm frontend || true
+            docker stop frontend || true
+            docker rm frontend || true
 
-      #       docker pull $IMAGE
+            docker pull $IMAGE
 
-      #       docker run -d \
-      #         --name frontend \
-      #         -p 3000:3000 \
-      #         --network backend-net \
-      #         --restart always \
-      #         $IMAGE
+            docker run -d \
+              --name frontend \
+              -p 3000:3000 \
+              --network backend-net \
+              --restart always \
+              $IMAGE
 
-      #       echo "Frontend deployed successfully"
+            echo "Frontend deployed successfully"
